@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<style>
+	*{
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	.warp{
+		width: 600px;
+		height: 500px;
+		margin: 0 auto;
+		text-align: center;
+	}
+	.warp ul {
+		/*清除浮动 使ul获取高度*/
+		overflow: hidden;/*清除浮动*/
+
+	}
+	.warp ul li{
+		margin-top: 50px;
+		float: left;
+		width: 18%;
+		height: 100px;
+		line-height: 100px;
+		font-size: 12px;
+		background: #A9EEE6;
+		text-align: center;
+		color: #FEFAEC;
+		margin-right: 1%;
+	}
+	.sub1{
+		background: #3AD3CD;
+	}
+	.form1{
+		position: fixed;
+		top: 20px;
+	}
+</style>
+<body>
+	<div class="warp">
+		<ul id="ul1">
+			<li class="1">充话费</li>
+			<li class="2">游戏</li>
+			<li class="3">旅行</li>
+			<li class="4">车险</li>
+			<li class="5">电影</li>
+		</ul>
+	
+		<form class="form1" action="do.php" method="get" accept-charset="utf-8">
+			<label for="addtext">添加项目</label>
+			<input id="addtext" type="text" name="">
+
+			<input id="addbutton" class="addbutton" type="button" value="添加项目">
+			<!-- 隐藏的 -->
+			<input id="submithid" type="hidden" name="case">
+			<input id="submitbut" class="sub1" type="submit" value="提交">
+		</form>
+	</div>
+</body>
+<script type="text/javascript" src="jquery-1.8.3.min.js"></script>
+<script>
+
+	$("#ul1").on("click","li",_tab);
+	// $("form").submit(function(e){
+	// 	  alert("Submitted");
+	// 	});
+	/*改变列表列表*/
+	function _tab()
+	{
+		$(this).siblings('li').css({
+			background:"#A9EEE6",
+			fontSize:"12px",
+			color:"#fff"
+		});
+		$(this).css({
+			background:"#F9A1BC",
+			fontSize:"25px",
+			color:"#F54EA2"
+		});
+		/*点击时 将当前 目标的值 赋值给input的 hidden标签*/
+		$("#submithid").val($(this).html());
+	}
+/*判断 并且提交*/
+	/*d动态添加的 事件  覆盖 原有提交属性*/	
+	$("form").on("submit",submitbtn);
+	function submitbtn()
+	{
+		if($("#submithid").val()=="")
+		{
+			alert("您未选择，请选择");
+			return false;/*停止程序*/
+		}
+	}
+/*判断 并且添加*/
+	$("#addbutton").on("click",_addfunction);
+	function _addfunction()
+	{
+		var _val = $("#addtext").val();
+		if(_val=="")
+		{
+			alert("您未输入添加项目名称");
+			return false;
+		}
+		else
+		{
+			var str ="";
+			var _str= str + "<li>" + _val + "</li>";
+			$("#ul1").append(_str);
+		}
+		
+
+	}
+
+
+
+
+
+//直接使用on事件，不能对动态添加的元素进行控制，从这儿看，on是不能替代live事件的
+				// $(".wrap li").on("click",function(){
+				// 	$(this).toggleClass("act").siblings().removeClass("act");
+				// });
+// 下面的是live事件，用live事件没有任何问题，但是不提倡用
+				// $(".wrap li").live("click",function(){
+				// 	$(this).toggleClass("act").siblings().removeClass("act");
+				// });
+// 下面是on事件替代live事件的关键，要将事件绑定在父级元素上，并且在第二个参数上传入事件目标的标签名，这样可以实现事件代理，节省空间、监听。所以从这儿看，live事件完全没有存在的意义了。
+	// $(".wrap").on("click","li",function(){
+	// 	$(this).toggleClass("act").siblings().removeClass("act");
+	// });
+</script>
+</html>
